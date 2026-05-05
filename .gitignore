@@ -1,2 +1,5 @@
 # venv environment folder
 .venv
+
+# Pycache folders
+__pycache__
