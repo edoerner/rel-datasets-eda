@@ -3,3 +3,6 @@
 
 # Pycache folders
 __pycache__
+
+# macOS system files
+.DS_Store
