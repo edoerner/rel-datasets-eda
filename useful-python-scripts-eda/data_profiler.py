@@ -222,11 +222,13 @@ class DataProfiler:
         overview = self.generate_overview()
         
         # Profile numeric columns
+        self.numeric_profiles = []  # Reset profiles in case of multiple calls.
         numeric_cols = self.df.select_dtypes(include=[np.number]).columns
         for col in numeric_cols:
             self.numeric_profiles.append(self.profile_numeric_column(col))
-        
+
         # Profile categorical columns
+        self.categorical_profiles = [] # Reset profiles in case of multiple calls.
         categorical_cols = self.df.select_dtypes(include=['object', 'category']).columns
         for col in categorical_cols:
             self.categorical_profiles.append(self.profile_categorical_column(col))
