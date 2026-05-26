@@ -1,8 +1,11 @@
-# venv environment folder
+# venv environment folder.
 .venv
 
-# Pycache folders
+# Pycache folders.
 __pycache__
 
-# macOS system files
+# macOS system files.
 .DS_Store
+
+# Input files.
+input/
