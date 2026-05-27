@@ -1,0 +1,14 @@
+# Notebook environment
+jupyter
+
+# Core EDA stack
+pandas
+numpy
+matplotlib
+seaborn
+scipy
+scikit-learn
+
+# Dataset access
+kaggle
+relbench
