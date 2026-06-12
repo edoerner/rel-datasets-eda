@@ -14,20 +14,28 @@ import warnings
 warnings.filterwarnings('ignore')
 
 class MissingDataAnalyzer:
-    def __init__(self, df: pd.DataFrame):
+    def __init__(self, df: pd.DataFrame, exclude_columns: Optional[List[str]] = None):
         """
         Initialize the missing data analyzer.
         
         Args:
             df: DataFrame to analyze
+            exclude_columns: Columns to exclude from default analysis
         """
         self.df = df
+        self.exclude_columns = exclude_columns or []
+        missing_cols = [col for col in self.exclude_columns if col not in df.columns]
+        if missing_cols:
+            raise ValueError(f"Exclude columns not found in DataFrame: {missing_cols}")
+
+        self.included_cols = [col for col in df.columns if col not in self.exclude_columns]
+        self.numeric_cols = df[self.included_cols].select_dtypes(include=[np.number]).columns.tolist()
         
     def get_missing_summary(self) -> pd.DataFrame:
         """Get summary of missing values across all columns."""
         missing_data = []
         
-        for col in self.df.columns:
+        for col in self.included_cols:
             missing_count = self.df[col].isna().sum()
             if missing_count > 0:
                 missing_data.append({
@@ -46,7 +54,7 @@ class MissingDataAnalyzer:
     def analyze_missingness_patterns(self) -> pd.DataFrame:
         """Analyze patterns of co-occurring missing values."""
         # Create binary missingness matrix
-        missing_matrix = self.df.isna().astype(int)
+        missing_matrix = self.df[self.included_cols].isna().astype(int)
         
         # Find columns with missing values
         cols_with_missing = [col for col in missing_matrix.columns if missing_matrix[col].sum() > 0]
@@ -100,8 +108,7 @@ class MissingDataAnalyzer:
         
         # Test columns (use numeric columns by default)
         if test_columns is None:
-            test_columns = [c for c in self.df.select_dtypes(include=[np.number]).columns 
-                          if c != column and self.df[c].notna().sum() > 0]
+            test_columns = [c for c in self.numeric_cols if c != column and self.df[c].notna().sum() > 0]
         
         # Test for MAR: is missingness related to other variables?
         mar_evidence = []
@@ -187,7 +194,7 @@ class MissingDataAnalyzer:
             max_cols: Maximum columns to display
         """
         # Get columns with missing values
-        cols_with_missing = [col for col in self.df.columns if self.df[col].isna().sum() > 0]
+        cols_with_missing = [col for col in self.included_cols if self.df[col].isna().sum() > 0]
         cols_with_missing = cols_with_missing[:max_cols]
         
         if not cols_with_missing:
@@ -241,7 +248,7 @@ class MissingDataAnalyzer:
     def plot_missing_correlation(self, figsize: Tuple[int, int] = (10, 8)):
         """Plot correlation matrix of missingness patterns."""
         # Create binary missingness matrix
-        missing_matrix = self.df.isna().astype(int)
+        missing_matrix = self.df[self.included_cols].isna().astype(int)
         
         # Get columns with missing values
         cols_with_missing = [col for col in missing_matrix.columns if missing_matrix[col].sum() > 0]
@@ -280,7 +287,7 @@ class MissingDataAnalyzer:
         }
         
         # Classify each column with missing values
-        for col in self.df.columns:
+        for col in self.included_cols:
             if self.df[col].isna().sum() > 0:
                 classification = self.classify_missingness_type(col)
                 recommendation = self.recommend_strategy(col)
@@ -361,4 +368,3 @@ if __name__ == "__main__":
     analyzer.plot_missing_bar()
     analyzer.plot_missing_heatmap()
     analyzer.plot_missing_correlation()
-

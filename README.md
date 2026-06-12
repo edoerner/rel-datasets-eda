@@ -100,7 +100,7 @@ print(report["data_quality_issues"])
 ```python
 from distribution_analyzer import DistributionAnalyzer
 
-analyzer = DistributionAnalyzer(df)
+analyzer = DistributionAnalyzer(df, exclude_columns=["customer_id"])
 distribution_report = analyzer.generate_distribution_report()
 
 print(distribution_report)
@@ -116,7 +116,7 @@ analyzer.plot_categorical_distributions()
 ```python
 from correlation_explorer import CorrelationExplorer
 
-explorer = CorrelationExplorer(df)
+explorer = CorrelationExplorer(df, exclude_columns=["customer_id"])
 
 high_corr = explorer.find_high_correlations(threshold=0.7, method="pearson")
 print(high_corr)
@@ -133,7 +133,7 @@ explorer.plot_top_correlations(n_pairs=10)
 ```python
 from outlier_suite import OutlierSuite
 
-suite = OutlierSuite(df)
+suite = OutlierSuite(df, exclude_columns=["customer_id"])
 
 summary = suite.compare_methods_all_columns()
 print(summary)
@@ -149,7 +149,7 @@ print(f"Found {outliers.sum()} multivariate outliers")
 ```python
 from missing_data_analyzer import MissingDataAnalyzer
 
-analyzer = MissingDataAnalyzer(df)
+analyzer = MissingDataAnalyzer(df, exclude_columns=["customer_id"])
 report = analyzer.generate_full_report()
 
 print(report["summary"])

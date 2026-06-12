@@ -14,16 +14,23 @@ import warnings
 warnings.filterwarnings('ignore')
 
 class DistributionAnalyzer:
-    def __init__(self, df: pd.DataFrame):
+    def __init__(self, df: pd.DataFrame, exclude_columns: Optional[List[str]] = None):
         """
         Initialize the analyzer.
         
         Args:
             df: DataFrame to analyze
+            exclude_columns: Columns to exclude from default analysis
         """
         self.df = df
-        self.numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
-        self.categorical_cols = df.select_dtypes(include=['object', 'category']).columns.tolist()
+        self.exclude_columns = exclude_columns or []
+        missing_cols = [col for col in self.exclude_columns if col not in df.columns]
+        if missing_cols:
+            raise ValueError(f"Exclude columns not found in DataFrame: {missing_cols}")
+
+        included_cols = [col for col in df.columns if col not in self.exclude_columns]
+        self.numeric_cols = df[included_cols].select_dtypes(include=[np.number]).columns.tolist()
+        self.categorical_cols = df[included_cols].select_dtypes(include=['object', 'category']).columns.tolist()
         
     def analyze_numeric_distribution(self, col: str) -> Dict[str, any]:
         """
@@ -371,4 +378,3 @@ if __name__ == "__main__":
     
     print("Generating categorical distribution plots...")
     analyzer.plot_categorical_distributions()
-

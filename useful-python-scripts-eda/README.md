@@ -52,7 +52,7 @@ report['data_quality_issues'].to_csv('issues.csv', index=False)
 from distribution_analyzer import DistributionAnalyzer
 
 df = pd.read_csv('data.csv')
-analyzer = DistributionAnalyzer(df)
+analyzer = DistributionAnalyzer(df, exclude_columns=['customer_id'])
 
 # Generate distribution report
 report = analyzer.generate_distribution_report()
@@ -74,7 +74,7 @@ analyzer.plot_categorical_distributions()
 from correlation_explorer import CorrelationExplorer
 
 df = pd.read_csv('data.csv')
-explorer = CorrelationExplorer(df)
+explorer = CorrelationExplorer(df, exclude_columns=['customer_id'])
 
 # Find high correlations
 high_corr = explorer.find_high_correlations(threshold=0.7, method='pearson')
@@ -102,7 +102,7 @@ explorer.plot_top_correlations(n_pairs=10)
 from outlier_suite import OutlierSuite
 
 df = pd.read_csv('data.csv')
-suite = OutlierSuite(df)
+suite = OutlierSuite(df, exclude_columns=['customer_id'])
 
 # Compare methods across all columns
 summary = suite.compare_methods_all_columns()
@@ -127,7 +127,7 @@ print(impact)
 from missing_data_analyzer import MissingDataAnalyzer
 
 df = pd.read_csv('data.csv')
-analyzer = MissingDataAnalyzer(df)
+analyzer = MissingDataAnalyzer(df, exclude_columns=['customer_id'])
 
 # Generate full report
 report = analyzer.generate_full_report()
@@ -157,4 +157,3 @@ print(f"Recommendation: {recommendation}")
 ```
 
 ---
-

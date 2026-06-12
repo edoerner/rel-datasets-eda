@@ -16,15 +16,22 @@ import warnings
 warnings.filterwarnings('ignore')
 
 class OutlierSuite:
-    def __init__(self, df: pd.DataFrame):
+    def __init__(self, df: pd.DataFrame, exclude_columns: Optional[List[str]] = None):
         """
         Initialize the outlier detection suite.
         
         Args:
             df: DataFrame to analyze
+            exclude_columns: Columns to exclude from default analysis
         """
         self.df = df
-        self.numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+        self.exclude_columns = exclude_columns or []
+        missing_cols = [col for col in self.exclude_columns if col not in df.columns]
+        if missing_cols:
+            raise ValueError(f"Exclude columns not found in DataFrame: {missing_cols}")
+
+        included_cols = [col for col in df.columns if col not in self.exclude_columns]
+        self.numeric_cols = df[included_cols].select_dtypes(include=[np.number]).columns.tolist()
         self.outlier_masks = {}
         
     def detect_iqr_outliers(
@@ -392,4 +399,3 @@ if __name__ == "__main__":
     
     print("Generating multivariate outlier plot...")
     suite.plot_multivariate_outliers(['feature1', 'feature2'])
-
