@@ -4,8 +4,9 @@ Exploratory data analysis notebooks and reusable Python utilities for profiling 
 
 - **Berka banking dataset** from Kaggle
 - **rel-hm dataset** from RelBench
+- **rel-amazon dataset** from RelBench
 
-Both notebooks build a single analysis-ready table from source relational tables, then run a shared set of EDA helpers for profiling, distribution analysis, correlation exploration, outlier detection, and missing data analysis.
+All notebooks build a single analysis-ready table from source relational tables, then run a shared set of EDA helpers for profiling, distribution analysis, correlation exploration, outlier detection, and missing data analysis.
 
 This project is inspired by the KDnuggets article [5 Useful Python Scripts to Automate Exploratory Data Analysis](https://www.kdnuggets.com/5-useful-python-scripts-to-automate-exploratory-data-analysis). The Python utilities for exploratory data analysis are taken from the [`useful-python-scripts-eda`](https://github.com/balapriyac/data-science-tutorials/tree/main/useful-python-scripts-eda) directory in the `balapriyac/data-science-tutorials` repository.
 
@@ -15,6 +16,8 @@ This project is inspired by the KDnuggets article [5 Useful Python Scripts to Au
 .
 ├── berka-dataset/
 │   └── berka_dataset_eda.ipynb
+├── rel-amazon/
+│   └── rel_amazon_eda.ipynb
 ├── rel-hm/
 │   └── rel_hm_eda.ipynb
 ├── useful-python-scripts-eda/
@@ -53,7 +56,7 @@ pip install -r requirements.txt
 
 For the Berka notebook, install a Kaggle API token at `~/.kaggle/kaggle.json`. The notebook downloads `marceloventura/the-berka-dataset`.
 
-For the rel-hm notebook, RelBench downloads the dataset through `relbench.datasets.get_dataset`.
+For the rel-amazon and rel-hm notebook, RelBench downloads the dataset through `relbench.datasets.get_dataset`.
 
 ## Usage
 
@@ -66,6 +69,7 @@ jupyter notebook
 Then open one of the included notebooks:
 
 - `berka-dataset/berka_dataset_eda.ipynb`
+- `rel-amazon/rel_amazon_eda.ipynb`
 - `rel-hm/rel_hm_eda.ipynb`
 
 Each notebook imports the reusable EDA utilities from `useful-python-scripts-eda`, loads a relational dataset, creates a joined analysis table, and runs the same analysis workflow.
